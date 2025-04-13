@@ -1,274 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CrunchVerse – The Snack Multiverse</title>
-    <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
-            overflow-x: hidden;
-            background: #070b19;
-            color: #fff;
-        }
-
-        /* Hero section styles */
-        .hero {
-            position: relative;
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        /* Star background */
-        .stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .star {
-            position: absolute;
-            background-color: #fff;
-            border-radius: 50%;
-            animation: twinkle 4s infinite ease-in-out;
-        }
-
-        /* Floating snack planets */
-        .snack-planet {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            animation: float 15s infinite ease-in-out;
-        }
-
-        /* Hero content */
-        .hero-content {
-            text-align: center;
-            max-width: 800px;
-            z-index: 2;
-            background-color: rgba(7, 11, 25, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
-            transform: translateY(0);
-            animation: pulse 4s infinite ease-in-out;
-        }
-
-        .hero-title {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            color: #f8e71c;
-            text-shadow: 0 0 10px #f8e71c, 0 0 20px #f8e71c;
-            letter-spacing: 2px;
-        }
-
-        .hero-subtitle {
-            font-size: 1.8rem;
-            margin-bottom: 2rem;
-            color: #ff8a00;
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, #9c27b0, #3f51b5);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(156, 39, 176, 0.7);
-        }
-
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(156, 39, 176, 1);
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transform: rotate(45deg);
-            transition: all 0.5s ease;
-            opacity: 0;
-        }
-
-        .cta-button:hover::before {
-            animation: shine 1.5s infinite;
-            opacity: 1;
-        }
-
-        /* Animations */
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateY(-20px) rotate(5deg);
-            }
-            50% {
-                transform: translateY(0) rotate(0deg);
-            }
-            75% {
-                transform: translateY(20px) rotate(-5deg);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.02);
-            }
-        }
-
-        @keyframes shine {
-            0% {
-                left: -100%;
-                opacity: 0;
-            }
-            20% {
-                left: 100%;
-                opacity: 0.6;
-            }
-            100% {
-                left: 100%;
-                opacity: 0;
-            }
-        }
-
-        /* Responsive styles */
-        @media screen and (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .cta-button {
-                padding: 0.8rem 1.6rem;
-                font-size: 1rem;
-            }
-            
-            .snack-planet {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <section class="hero">
-        <div class="stars" id="stars"></div>
-        
-        <!-- Snack planets will be generated via JS -->
-        <div class="hero-content">
-            <h1 class="hero-title">Welcome to CrunchVerse</h1>
-            <h2 class="hero-subtitle">Multiverse of Madness… but for Snacks 🍪🌀</h2>
-            <button class="cta-button">Enter Your Flavor Realm</button>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Preloader -->
+    <div id="preloader">
+      <div class="logo-container">
+        <div class="logo">
+          <span>C</span>runch<span>V</span>erse
+          <div class="logo-accent"></div>
         </div>
+      </div>
+
+      <div class="snack-icons">
+        <div class="snack-icon">🌶️</div>
+        <div class="snack-icon">🍭</div>
+        <div class="snack-icon">🥨</div>
+        <div class="snack-icon">🍋</div>
+      </div>
+
+      <div class="loading-message">Summoning snack realms...</div>
+
+      <div class="progress-container">
+        <div class="progress-bar"></div>
+        <div class="crunch-marks"></div>
+      </div>
+
+      <div class="percentage">0%</div>
+    </div>
+    <!-- Floating Button -->
+    <div id="flavor-finder-button" class="floating-button">
+      Find My Flavor 🚀
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="flavor-modal-overlay" class="modal-overlay">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+
+        <div id="mood-selector" class="modal-section">
+          <h2>How are you feeling today?</h2>
+          <div class="mood-buttons">
+            <button class="mood-button" data-target="sweet-galaxy">😴</button>
+            <button class="mood-button" data-target="salty-desert">🤓</button>
+            <button class="mood-button" data-target="spicy-world">🧨</button>
+            <button class="mood-button" data-target="sour-planet">🤤</button>
+          </div>
+        </div>
+
+        <div id="loading-screen" class="modal-section hidden">
+          <div class="loading-spinner"></div>
+          <p class="loading-text">Analyzing your flavor aura...</p>
+        </div>
+      </div>
+    </div>
+    <section class="hero">
+      <!-- Floating Button -->
+      <div id="flavor-finder-button" class="floating-button">
+        Find My Flavor 🚀
+      </div>
+
+      <!-- Modal Overlay -->
+      <div id="flavor-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+          <span class="close-button">&times;</span>
+
+          <div id="mood-selector" class="modal-section">
+            <h2>How are you feeling today?</h2>
+            <div class="mood-buttons">
+              <button class="mood-button" data-target="sweet-galaxy">🍭</button>
+              <button class="mood-button" data-target="salty-desert">🧂</button>
+              <button class="mood-button" data-target="spicy-world">🌶️</button>
+              <button class="mood-button" data-target="sour-planet">🍋</button>
+            </div>
+          </div>
+
+          <div id="loading-screen" class="modal-section hidden">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Analyzing your flavor aura...</p>
+          </div>
+        </div>
+      </div>
+      <div class="stars" id="stars"></div>
+
+      <!-- Snack planets will be generated via JS -->
+      <div class="hero-content">
+        <h1 class="hero-title">Welcome to CrunchVerse</h1>
+        <h2 class="hero-subtitle">Multiverse of Madness… but for Snacks</h2>
+      </div>
     </section>
 
-    <script>
-        // Create stars in the background
-        const starsContainer = document.getElementById('stars');
-        const numberOfStars = 200;
-        
-        for (let i = 0; i < numberOfStars; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            
-            // Random size between 1 and 4 pixels
-            const size = Math.random() * 3 + 1;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            
-            // Random position
-            star.style.top = `${Math.random() * 100}%`;
-            star.style.left = `${Math.random() * 100}%`;
-            
-            // Random twinkle delay
-            star.style.animationDelay = `${Math.random() * 4}s`;
-            
-            starsContainer.appendChild(star);
-        }
-        
-        // Create snack planets
-        const hero = document.querySelector('.hero');
-        const snackEmojis = ['🍪', '🍩', '🍕', '🍫', '🍿', '🥨', '🍦', '🥐', '🧁', '🍰'];
-        const numberOfPlanets = 8;
-        
-        for (let i = 0; i < numberOfPlanets; i++) {
-            const planet = document.createElement('div');
-            planet.classList.add('snack-planet');
-            
-            // Random size between 40 and 100 pixels
-            const size = Math.random() * 60 + 40;
-            planet.style.width = `${size}px`;
-            planet.style.height = `${size}px`;
-            
-            // Random position
-            planet.style.top = `${Math.random() * 80 + 10}%`;
-            planet.style.left = `${Math.random() * 80 + 10}%`;
-            
-            // Random animation delay
-            planet.style.animationDelay = `${Math.random() * 5}s`;
-            
-            // Random emoji as snack
-            const randomEmoji = snackEmojis[Math.floor(Math.random() * snackEmojis.length)];
-            planet.textContent = randomEmoji;
-            
-            // Set z-index based on size for depth perception
-            planet.style.zIndex = Math.floor(size) % 2 === 0 ? 0 : 3;
-            
-            hero.appendChild(planet);
-        }
-        
-        // Button hover sound effect (optional)
-        const ctaButton = document.querySelector('.cta-button');
-        
-        ctaButton.addEventListener('click', () => {
-            alert('Launching into the CrunchVerse! 🚀');
-        });
-    </script>
-</body>
+    <section id="spicy-world">
+      <!-- Heat wave effect -->
+      <div class="heat-waves">
+        <div class="heat-wave"></div>
+        <div class="heat-wave"></div>
+        <div class="heat-wave"></div>
+      </div>
+
+      <!-- Floating snack planets (will be generated via JS) -->
+
+      <!-- Section header -->
+      <header class="section-header">
+        <h2 class="section-title">🔥 Welcome to Spicy World</h2>
+        <p class="section-subtitle">Can you handle the heat?</p>
+      </header>
+
+      <!-- Snack cards -->
+      <div class="snack-cards">
+        <div class="snack-card" data-delay="0">
+          <div class="snack-emoji">🔥</div>
+          <h3 class="snack-name">Hot Nachos</h3>
+          <p class="snack-description">
+            Crispy triangles of pure fire! These nachos are dusted with the
+            hottest peppers from across the multiverse. Eat them if you dare!
+          </p>
+        </div>
+
+        <div class="snack-card" data-delay="300">
+          <div class="snack-emoji">🌶️</div>
+          <h3 class="snack-name">Lava Puffs</h3>
+          <p class="snack-description">
+            Airy, crunchy puffs infused with molten spice cores. Each bite
+            releases waves of flavor that will make your taste buds erupt!
+          </p>
+        </div>
+
+        <div class="snack-card" data-delay="600">
+          <div class="snack-emoji">🌋</div>
+          <h3 class="snack-name">Volcano Chips</h3>
+          <p class="snack-description">
+            Kettle-cooked to perfection and seasoned with a blend of seven
+            secret spices. The heat builds slowly then EXPLODES with flavor!
+          </p>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="scroll-hint">
+        Scroll to cool down...
+        <span class="scroll-arrow">🔥↓</span>
+      </div>
+    </section>
+
+    <section id="sweet-galaxy">
+      <!-- Glowing stars background -->
+      <div class="stars-container" id="stars-container"></div>
+
+      <!-- Star trails that appear on scroll -->
+      <div id="star-trails-container"></div>
+
+      <!-- Floating candy elements will be added by JS -->
+
+      <!-- Section header -->
+      <header class="section-header">
+        <h2 class="section-title">🍭 You've entered Sweet Galaxy!</h2>
+        <p class="section-subtitle">So sugary it bends space-time 🍬</p>
+      </header>
+
+      <!-- Candy cards -->
+      <div class="candy-cards">
+        <div class="candy-card" data-delay="0">
+          <div class="candy-emoji">🍩</div>
+          <h3 class="candy-name">Frosted Nebula Donut</h3>
+          <p class="candy-description">
+            A perfect ring of sweetness dusted with cosmic sprinkles. Each bite
+            releases a burst of stellar flavors that dance across your taste
+            buds like shooting stars!
+          </p>
+        </div>
+
+        <div class="candy-card" data-delay="300">
+          <div class="candy-emoji">🍬</div>
+          <h3 class="candy-name">Gummy Comet</h3>
+          <p class="candy-description">
+            Stretchy, chewy comets with a trail of sweet crystals. These gummies
+            leave a flavor trail that lingers long after they've passed through
+            your galaxy of taste!
+          </p>
+        </div>
+
+        <div class="candy-card" data-delay="600">
+          <div class="candy-emoji">☁️</div>
+          <h3 class="candy-name">Marshmallow Meteor</h3>
+          <p class="candy-description">
+            Fluffy, cloud-like meteors that melt the moment they enter your
+            atmosphere. A heavenly mix of vanilla and stardust creates an
+            otherworldly treat!
+          </p>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="scroll-hint">
+        Keep floating...
+        <span class="scroll-arrow">🍭↓</span>
+      </div>
+    </section>
+
+    <section id="salty-desert">
+      <!-- Desert dunes background -->
+      <div class="dunes-container">
+        <div class="dune"></div>
+        <div class="dune"></div>
+        <div class="dune"></div>
+      </div>
+
+      <!-- Sandstorm effect -->
+      <div class="sandstorm"></div>
+      <div class="sandstorm-blur"></div>
+
+      <!-- Snack elements -->
+      <div class="snack-element pretzel-cactus">🥨</div>
+      <div class="snack-element corn-chip">🌽</div>
+      <div class="snack-element cracker">🍘</div>
+      <div class="snack-element salt-crystal">🧂</div>
+
+      <!-- Section header -->
+      <header class="section-header">
+        <h2 class="section-title">🌵 Welcome to the Salty Desert</h2>
+        <p class="section-subtitle">Crunch through the sands of time.</p>
+      </header>
+
+      <!-- Snack cards -->
+      <div class="snack-cards">
+        <div class="snack-card" data-delay="0">
+          <div class="sand-particles" id="particles-1"></div>
+          <div class="snack-emoji">🥨</div>
+          <h3 class="snack-name">Desert Pretzel Stick</h3>
+          <p class="snack-description">
+            Twisted cactus-like pretzels that have weathered the salty winds for
+            eons. Their crunchy exterior hides a taste that's both earthy and
+            timeless.
+          </p>
+        </div>
+
+        <div class="snack-card" data-delay="300">
+          <div class="sand-particles" id="particles-2"></div>
+          <div class="snack-emoji">🧂</div>
+          <h3 class="snack-name">Salted Cracker Fossil</h3>
+          <p class="snack-description">
+            Ancient crackers preserved by the desert salt. Archaeologists of
+            flavor claim these fossils contain the original recipe from the dawn
+            of snack time.
+          </p>
+        </div>
+
+        <div class="snack-card" data-delay="600">
+          <div class="sand-particles" id="particles-3"></div>
+          <div class="snack-emoji">🌽</div>
+          <h3 class="snack-name">Corn Chip Mirage</h3>
+          <p class="snack-description">
+            Is it real or just a crunchy illusion? These triangular treasures
+            shimmer on the horizon, promising a burst of savory satisfaction
+            when you finally reach them.
+          </p>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="scroll-hint">
+        The next realm awaits...
+        <span class="scroll-arrow">🥨↓</span>
+      </div>
+    </section>
+  </body>
+  <script src="script.js"></script>
 </html>
