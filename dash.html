@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sensor Dashboard</title>
+  <style>
+    /* Import font */
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+    /* CSS Variables */
+    :root {
+      /* Light mode (default) */
+      --color-background: #f0f4f8;
+      --color-foreground: #2d3748;
+      --color-primary: #4a6fa5;
+      --color-primary-light: #b3c5e5;
+      --color-secondary: #5e8b7e;
+      --color-secondary-light: #a7c4bc;
+      --color-accent: #4a6fa5;
+      --color-muted: #718096;
+      --color-muted-background: #edf2f7;
+      --color-border: #e2e8f0;
+      --color-card-bg: rgba(255, 255, 255, 0.9);
+      --color-footer-bg: rgba(255, 255, 255, 0.7);
+      --gradient-overlay: linear-gradient(135deg, rgba(240, 244, 248, 0.85) 0%, rgba(233, 236, 239, 0.85) 100%);
+      --gradient-title: linear-gradient(to right, #4a6fa5, #5e8b7e);
+      --shadow-strength: 0.1;
+
+      /* Typography */
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+        "Helvetica Neue", sans-serif;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / var(--shadow-strength));
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / var(--shadow-strength)), 0 1px 2px -1px rgb(0 0 0 / var(--shadow-strength));
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / var(--shadow-strength)), 0 2px 4px -2px rgb(0 0 0 / var(--shadow-strength));
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / var(--shadow-strength)), 0 4px 6px -4px rgb(0 0 0 / var(--shadow-strength));
+
+      /* Transitions */
+      --transition-all: all 0.2s ease;
+      --transition-colors: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      --transition-shadow: box-shadow 0.2s ease;
+      --transition-transform: transform 0.2s ease;
+    }
+
+    /* Dark theme variables */
+    [data-theme="dark"] {
+      --color-background: #1a202c;
+      --color-foreground: #e2e8f0;
+      --color-primary: #81a1d1;
+      --color-primary-light: #4a6fa5;
+      --color-secondary: #8fbcb3;
+      --color-secondary-light: #5e8b7e;
+      --color-accent: #81a1d1;
+      --color-muted: #a0aec0;
+      --color-muted-background: #2d3748;
+      --color-border: #4a5568;
+      --color-card-bg: rgba(45, 55, 72, 0.9);
+      --color-footer-bg: rgba(45, 55, 72, 0.7);
+      --gradient-overlay: linear-gradient(135deg, rgba(26, 32, 44, 0.85) 0%, rgba(45, 55, 72, 0.85) 100%);
+      --gradient-title: linear-gradient(to right, #81a1d1, #8fbcb3);
+      --shadow-strength: 0.3;
+    }
+
+    /* Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-foreground);
+      line-height: 1.6;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      height: 100%;
+      position: relative;
+      scroll-behavior: smooth;
+    }
+
+    /* Video Background Styles */
+    .video-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -10;
+      overflow: hidden;
+    }
+
+    .video-background video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translateX(-50%) translateY(-50%);
+      filter: blur(8px) brightness(0.8);
+      object-fit: cover;
+    }
+
+    .video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-overlay);
+      z-index: -5;
+    }
+
+    /* Dashboard Specific Styles */
+    .main {
+      min-height: 100vh;
+      padding: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (min-width: 768px) {
+      .main {
+        padding: 2.5rem;
+      }
+    }
+
+    .dashboard-header {
+      max-width: 64rem;
+      margin: 0 auto 2.5rem;
+      padding-top: 4rem;
+    }
+
+    .dashboard-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      background: var(--gradient-title);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.75rem;
+      text-align: center;
+      letter-spacing: -0.025em;
+    }
+
+    @media (min-width: 768px) {
+      .dashboard-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .dashboard-title {
+        font-size: 3rem;
+      }
+    }
+
+    .dashboard-description {
+      color: var(--color-muted);
+      max-width: 42rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .dashboard-container {
+      max-width: 72rem;
+      margin: 0 auto;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .dashboard-card {
+      background-color: var(--color-card-bg);
+      border-radius: 0.75rem;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      border: 1px solid rgba(74, 111, 165, 0.2);
+      transition: var(--transition-shadow), var(--transition-transform);
+      backdrop-filter: blur(5px);
+    }
+
+    .dashboard-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .dashboard-card-header {
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .dashboard-card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--color-foreground);
+    }
+
+    .dashboard-card-body {
+      padding: 0.75rem;
+    }
+
+    .dashboard-card-body iframe {
+      width: 100%;
+      border: 1px solid var(--color-border);
+      border-radius: 0.5rem;
+      background-color: white;
+    }
+
+    .dashboard-footer {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .dashboard-footer-text {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+      background-color: var(--color-footer-bg);
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      backdrop-filter: blur(5px);
+    }
+
+    /* Card Variants - Updated colors */
+    .card-current {
+      border-color: rgba(74, 111, 165, 0.3);
+    }
+
+    .card-current .dashboard-card-header {
+      background: linear-gradient(to right, rgba(231, 241, 252, 0.8), rgba(179, 197, 229, 0.5));
+    }
+
+    [data-theme="dark"] .card-current .dashboard-card-header {
+      background: linear-gradient(to right, rgba(74, 111, 165, 0.5), rgba(64, 94, 140, 0.3));
+    }
+
+    .card-voltage {
+      border-color: rgba(94, 139, 126, 0.3);
+    }
+
+    .card-voltage .dashboard-card-header {
+      background: linear-gradient(to right, rgba(233, 243, 240, 0.8), rgba(167, 196, 188, 0.5));
+    }
+
+    [data-theme="dark"] .card-voltage .dashboard-card-header {
+      background: linear-gradient(to right, rgba(94, 139, 126, 0.5), rgba(79, 117, 106, 0.3));
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .animate-slide-up {
+      animation: slideUp 0.5s ease-in-out;
+    }
+
+    /* CTA Button */
+    .cta-button {
+      position: fixed;
+      top: 30px;
+      right: 90px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      color: white;
+      border: none;
+      border-radius: 2rem;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 100;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(74, 111, 165, 0.3);
+    }
+
+    .cta-button svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    /* Pulse animation for CTA */
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(74, 111, 165, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(74, 111, 165, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(74, 111, 165, 0);
+      }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 100;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(74, 111, 165, 0.3);
+    }
+
+    .theme-toggle svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    /* Scroll Hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--color-muted);
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .scroll-hint-text {
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .scroll-arrow {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .bounce {
+      animation: bounce 2s infinite;
+    }
+
+    /* Responsive iframe adjustments */
+    @media (max-width: 768px) {
+      .dashboard-card-body iframe {
+        height: 220px;
+      }
+      
+      .cta-button {
+        top: 20px;
+        right: 70px;
+        padding: 0.5rem 1rem;
+      }
+      
+      .theme-toggle {
+        top: 20px;
+        right: 20px;
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .dashboard-card-body iframe {
+        height: 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Video Background -->
+  <div class="video-background">
+    <video autoplay muted loop playsinline>
+      <source src="./video/background.mp4" type="video/mp4">
+      <!-- You can add additional source formats for better browser compatibility -->
+      
+      <!-- Fallback for browsers that don't support video -->
+    </video>
+  </div>
+  
+  <!-- Semi-transparent overlay -->
+  <div class="video-overlay"></div>
+  
+  <!-- CTA Button -->
+  <button class="cta-button pulse">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    </svg>
+    Add Sensor
+  </button>
+  
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+    <!-- Moon icon for light mode (shown by default) -->
+    <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+    </svg>
+    <!-- Sun icon for dark mode (hidden by default) -->
+    <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+    </svg>
+  </button>
+  
+  <div class="main" id="top">
+    <header class="dashboard-header animate-fade-in">
+      <div class="text-center">
+        <h1 class="dashboard-title">
+          Sensor Dashboard
+        </h1>
+        <p class="dashboard-description">
+          Real-time monitoring of environmental conditions from connected
+          sensors
+        </p>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+      <div class="dashboard-grid">
+        
+        <div class="dashboard-card card-current animate-slide-up">
+          <div class="dashboard-card-header">
+            <div class="flex items-center">
+              <h2 class="dashboard-card-title">
+                Current
+              </h2>
+            </div>
+          </div>
+          <div class="dashboard-card-body">
+            <iframe height="260" src="https://thingspeak.com/channels/2902601/charts/2?bgcolor=%23ffffff&color=%234a6fa5&dynamic=true&results=60&type=line&update=15"></iframe>
+          </div>
+        </div>
+
+        <div class="dashboard-card card-voltage animate-slide-up" style="animation-delay: 0.1s;">
+          <div class="dashboard-card-header">
+            <div class="flex items-center">
+              <h2 class="dashboard-card-title">
+                Voltage
+              </h2>
+            </div>
+          </div>
+          <div class="dashboard-card-body">
+            <iframe height="260" src="https://thingspeak.com/channels/2902601/charts/1?bgcolor=%23ffffff&color=%235e8b7e&dynamic=true&results=60&type=line&update=15"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-footer">
+        <p class="dashboard-footer-text">
+          Data refreshes automatically every 15 seconds
+        </p>
+      </div>
+    </div>
+    
+    <!-- Scroll Hint - shown on first load -->
+    <div class="scroll-hint bounce" id="scroll-hint">
+      <span class="scroll-hint-text">Scroll for more data</span>
+      <svg class="scroll-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </div>
+  </div>
+  
+  <script>
+    // Check login status
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      alert("You are not logged in! Redirecting to login page.");
+      window.location.href = "https://ishikas2006.github.io/Volt-sense/index.html";
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      // Video fallback handling
+      const video = document.querySelector('video');
+      
+      video.addEventListener('error', function() {
+        // If video fails to load, apply a gradient background instead
+        document.querySelector('.video-background').style.display = 'none';
+        
+        if (document.documentElement.getAttribute('data-theme') === 'dark') {
+          document.body.style.background = 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)';
+        } else {
+          document.body.style.background = 'linear-gradient(135deg, #f0f4f8 0%, #e9ecef 100%)';
+        }
+      });
+      
+      // Add click handler for CTA button
+      document.querySelector('.cta-button').addEventListener('click', function() {
+        alert('Add Sensor functionality will be implemented soon!');
+      });
+      
+      // Theme toggle functionality
+      const themeToggle = document.getElementById('theme-toggle');
+      const moonIcon = document.getElementById('moon-icon');
+      const sunIcon = document.getElementById('sun-icon');
+      const htmlElement = document.documentElement;
+      
+      // Check for saved theme preference or use default light theme
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      htmlElement.setAttribute('data-theme', savedTheme);
+      
+      // Update icons based on current theme
+      if (savedTheme === 'dark') {
+        moonIcon.style.display = 'none';
+        sunIcon.style.display = 'block';
+      }
+      
+      // Handle theme toggle click
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = htmlElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        // Update theme
+        htmlElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        // Update icons
+        if (newTheme === 'dark') {
+          moonIcon.style.display = 'none';
+          sunIcon.style.display = 'block';
+        } else {
+          moonIcon.style.display = 'block';
+          sunIcon.style.display = 'none';
+        }
+        
+        // Update background if video failed to load
+        if (document.querySelector('.video-background').style.display === 'none') {
+          if (newTheme === 'dark') {
+            document.body.style.background = 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)';
+          } else {
+            document.body.style.background = 'linear-gradient(135deg, #f0f4f8 0%, #e9ecef 100%)';
+          }
+        }
+      });
+      
+      // Scroll hint functionality
+      const scrollHint = document.getElementById('scroll-hint');
+      
+      // Hide scroll hint after scrolling
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 100) {
+          scrollHint.style.opacity = '0';
+          scrollHint.style.transition = 'opacity 0.5s ease';
+          
+          // Remove from DOM after fade out
+          setTimeout(() => {
+            scrollHint.style.display = 'none';
+          }, 500);
+        }
+      });
+      
+      // Scroll down when clicking the hint
+      scrollHint.addEventListener('click', function() {
+        window.scrollBy({
+          top: window.innerHeight,
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
